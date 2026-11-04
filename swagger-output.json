@@ -26,9 +26,6 @@
     },
     "/api/menu": {
       "get": {
-        "tags": [
-          "Menu"
-        ],
         "description": "",
         "responses": {
           "200": {
