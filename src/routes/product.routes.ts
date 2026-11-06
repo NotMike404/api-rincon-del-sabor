@@ -9,6 +9,7 @@ import {
 
 const router: Router = Router();
 
+// Rutas del CRUD completo para productos
 router.get('/menu', getMenu);
 
 router.get('/menu/:id', getProduct);
