@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 
+// Esquema de validación del producto
 const productSchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio'),
 
@@ -11,6 +12,7 @@ const productSchema = z.object({
   stock: z.number().int().min(0, 'El stock debe ser mayor o igual a 0'),
 });
 
+// Middleware de validación
 export function validateProduct(
   req: Request,
   res: Response,
