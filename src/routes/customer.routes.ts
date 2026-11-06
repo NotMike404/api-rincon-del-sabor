@@ -9,6 +9,7 @@ import {
 
 const router: Router = Router();
 
+// 1. Rutas de CRUD completo para clientes
 router.get('/customers', getCustomers);
 
 router.get('/customers/:id', getCustomerById);

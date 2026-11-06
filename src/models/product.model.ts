@@ -1,9 +1,31 @@
 import pool from '../config/db.js';
 
-export async function getAllProducts() {
-  const result = await pool.query('SELECT * FROM products');
+export const getAllProducts = async (maxPrice?: number, page: number = 1, limit: number = 10) => {
+  const values: any[] = [];
+  let query = 'SELECT * FROM products';
+
+  // 1. Si enviaron filtro de precio máximo:
+  if (maxPrice !== undefined) {
+    values.push(maxPrice);
+    query += ` WHERE price <= $${values.length}`;
+  }
+
+  // Ordenamos siempre por ID
+  query += ' ORDER BY id ASC';
+
+  // 2. Calculamos el OFFSET para la paginación: (página - 1) * límite
+  const offset = (page - 1) * limit;
+
+  values.push(limit);
+  query += ` LIMIT $${values.length}`;
+
+  values.push(offset);
+  query += ` OFFSET $${values.length}`;
+
+  // Ejecutamos la consulta con parámetros seguros
+  const result = await pool.query(query, values);
   return result.rows;
-}
+};
 
 export async function getProductById(id: number) {
   const result = await pool.query(

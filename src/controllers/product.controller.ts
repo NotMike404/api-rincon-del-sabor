@@ -11,18 +11,22 @@ import {
   #swagger.tags = ['Products']
   #swagger.summary = 'Obtener todos los productos'
 */
-export async function getMenu(req: Request, res: Response) {
+export const getMenu = async (req: Request, res: Response) => {
   try {
-    const products = await getAllProducts();
+    // 1. Convertimos los textos de la URL (req.query) a números
+    const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined;
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+
+    // 2. Le pedimos los productos al modelo pasándole los filtros
+   const products = await getAllProducts( maxPrice, page, limit );
+
+    // 3. Respondemos al usuario con la lista en formato JSON
     res.json(products);
   } catch (error) {
-    console.error('Error al consultar menú:', error);
-
-    res.status(500).json({
-      error: 'Error interno del servidor',
-    });
+    res.status(500).json({ message: 'Error al obtener productos', error });
   }
-}
+};
 
 /*
   #swagger.tags = ['Products']
